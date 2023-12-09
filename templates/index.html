@@ -64,9 +64,9 @@
     <div class="title">
         <h1>TL;DR - GDPR Summarizer</h1>
     </div>
-    <form class="sum-form">
-        <textarea class="textbox text-input" placeholder="Provide the input text (i.e. GDPR document contents) here..."></textarea>
-        <textarea class="textbox text-output" readonly placeholder="Summarized text will appear here"></textarea>
+    <form class="sum-form" action="/summarize" method="post">
+        <textarea id="inputText" name="inputText" class="textbox text-input" placeholder="Provide the input text (i.e. GDPR document contents) here..."></textarea>
+        <textarea id="outputText" name="outputText" class="textbox text-output" readonly placeholder="Summarized text will appear here">{{ outputText }}</textarea>
         <span class="buttons">
             <input class="summarize-button" type="submit" value="Summarize!">
             <input class="upload-file-button" type="file" value="TXT">
