@@ -1,5 +1,9 @@
-from flask import Flask, request, render_template
 import os
+import sys
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
+
+from flask import Flask, request, render_template
+from main.logic.model import summarize as model_summarize
 
 # Get the path of the directory where app.py is located
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -16,8 +20,8 @@ def index():
 @app.route('/summarize', methods=['POST'])
 def summarize():
     text = request.form['inputText']
-    # For now, just return the same text received from the user
-    return render_template('index.html', outputText=text)
+    summarized_text = model_summarize(text)
+    return render_template('index.html', outputText=summarized_text)
 
 if __name__ == '__main__':
     app.run(debug=True)
