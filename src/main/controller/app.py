@@ -13,7 +13,6 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 template_dir = os.path.join(dir_path, '..', 'view')
 
 upload_dir = os.path.join(dir_path, '..', 'tools', 'uploads')
-print(upload_dir)
 
 app = Flask(__name__, template_folder=template_dir)
 
