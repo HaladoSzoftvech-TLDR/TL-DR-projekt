@@ -1,8 +1,9 @@
 import os
 import sys
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
-
+from PyPDF2 import PdfReader
 from flask import Flask, request, render_template
+from werkzeug.utils import secure_filename
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 from main.logic.model import summarize as model_summarize
 
 # Get the path of the directory where app.py is located
@@ -11,7 +12,13 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 # Use this path to construct the path of the 'view' directory
 template_dir = os.path.join(dir_path, '..', 'view')
 
+upload_dir = os.path.join(dir_path, '..', 'tools', 'uploads')
+print(upload_dir)
+
 app = Flask(__name__, template_folder=template_dir)
+
+# Set the path for the uploaded files to be stored
+app.config['UPLOAD_FOLDER'] = upload_dir
 
 @app.route('/')
 def index():
@@ -19,7 +26,18 @@ def index():
 
 @app.route('/summarize', methods=['POST'])
 def summarize():
-    text = request.form['inputText']
+    if 'file' in request.files and request.files['file'].filename != '':
+        file = request.files['file']
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        pdf_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        pdf = PdfReader(pdf_path)
+        text = " ".join(page.extract_text() for page in pdf.pages)
+        os.remove(pdf_path)
+    elif 'inputText' in request.form and request.form['inputText'].strip() != '':
+        text = request.form['inputText']
+    else:
+        return 'No file or text provided'
     summarized_text = model_summarize(text)
     return render_template('index.html', outputText=summarized_text)
 
