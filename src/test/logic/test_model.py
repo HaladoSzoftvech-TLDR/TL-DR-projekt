@@ -1,5 +1,5 @@
-from src.main.tools.privacy_policy_generator import generate_pp_for_test
-from src.main.logic.model import summarize
+from main.tools.privacy_policy_generator import generate_pp_for_test
+from main.logic.model import summarize
 import pytest
 
 
