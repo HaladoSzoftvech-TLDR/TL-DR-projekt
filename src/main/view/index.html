@@ -53,23 +53,33 @@
         }
     </style>
 </head>
+<script>
+    function validateForm() {
+        var x = document.forms["myForm"]["inputText"].value;
+        var y = document.forms["myForm"]["file"].value;
+        if (x == "" && y == "") {
+            alert("No file or text provided");
+            return false;
+        }
+    }
+</script>
 <body>
     <div class="navbar">
         <ul class="nav-links">
             <li><a href="javascript:void(0)">Home</a></li>
-            <li><a href="javascript:void(0)">Documentation</a></li>
+            <li><a href="/documentation">Documentation</a></li>
             <li><a href="javascript:void(0)">Feedback</a></li>
         </ul>
     </div>
     <div class="title">
         <h1>TL;DR - GDPR Summarizer</h1>
     </div>
-    <form class="sum-form" action="/summarize" method="post">
+    <form class="sum-form" action="/summarize" method="post" enctype="multipart/form-data" name="myForm" onsubmit="return validateForm()">
         <textarea id="inputText" name="inputText" class="textbox text-input" placeholder="Provide the input text (i.e. GDPR document contents) here..."></textarea>
         <textarea id="outputText" name="outputText" class="textbox text-output" readonly placeholder="Summarized text will appear here">{{ outputText }}</textarea>
         <span class="buttons">
             <input class="summarize-button" type="submit" value="Summarize!">
-            <input class="upload-file-button" type="file" value="TXT">
+            <input type="file" name="file" accept=".pdf">
         </span>
     </form>
 </body>
