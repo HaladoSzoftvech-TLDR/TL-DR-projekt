@@ -28,6 +28,8 @@ def summarize():
     if 'file' in request.files and request.files['file'].filename != '':
         file = request.files['file']
         filename = secure_filename(file.filename)
+        if not filename.endswith('.pdf'):
+            return 'Please upload a PDF file only'
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         pdf_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         pdf = PdfReader(pdf_path)
@@ -39,6 +41,7 @@ def summarize():
         return 'No file or text provided'
     summarized_text = model_summarize(text)
     return render_template('index.html', outputText=summarized_text)
+
 
 @app.route('/documentation')
 def documentation():
