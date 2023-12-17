@@ -70,12 +70,14 @@
             document.forms["myForm"]["file"].value = "";
             return false;
         }
-        if (!allowedExtension.exec(y)) {  
+        if (y != "" && !allowedExtension.exec(y)) {  // Check file type only when a file is uploaded
             alert("Please upload a PDF file only.");
             document.forms["myForm"]["file"].value = "";
             return false;
         }
     }
+
+
 </script>
 <body>
     <div class="navbar">
