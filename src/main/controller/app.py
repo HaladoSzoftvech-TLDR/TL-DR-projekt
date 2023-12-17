@@ -1,3 +1,4 @@
+import csv
 import os
 import sys
 from PyPDF2 import PdfReader
@@ -13,11 +14,13 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 template_dir = os.path.join(dir_path, '..', 'view')
 
 upload_dir = os.path.join(dir_path, '..', 'tools', 'uploads')
+feedback_dir = os.path.join(dir_path, '..', 'tools', 'feedback')
 
 app = Flask(__name__, template_folder=template_dir)
 
 # Set the path for the uploaded files to be stored
 app.config['UPLOAD_FOLDER'] = upload_dir
+app.config['FEEDBACK_FOLDER'] = feedback_dir
 
 @app.route('/')
 def index():
@@ -41,6 +44,21 @@ def summarize():
         return 'No file or text provided'
     summarized_text = model_summarize(text)
     return render_template('index.html', outputText=summarized_text)
+
+@app.route('/send_feedback', methods=['POST'])
+def send_feedback():
+    feedback_file_path = os.path.join(feedback_dir, 'feedback.csv')
+    name = request.form['fullName'] if request.form['fullName'] != "" else 'Anon'
+
+    email = request.form['emailAddress'] if request.form['emailAddress'] != "" else '-'
+
+    feedback_text = request.form['feedbackText']
+
+    with open(feedback_file_path, 'a') as f:
+        line = f'{name},{email},{feedback_text}\n'
+        f.write(line)
+
+    return render_template('index.html')
 
 @app.route('/documentation')
 def documentation():
