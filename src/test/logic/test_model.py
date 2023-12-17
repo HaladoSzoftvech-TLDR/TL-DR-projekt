@@ -1,25 +1,25 @@
 from src.main.tools.privacy_policy_generator import generate_pp_for_test
 from src.main.logic.model import summarize
+import pytest
 
 
-def test_model():
-    for i in range(0, 100):
-        gen_pp = generate_pp_for_test()
-        res = summarize(gen_pp[1])
-        print("Check company name")
-        check_string_containment(res, gen_pp[0]["company_name"])
-        print("Check data types")
-        check_string_containment(res, gen_pp[0]["data_types"])
-        print("Check retention period")
-        check_string_containment(res, gen_pp[0]["retention_period"])
-        print("Check user rights")
-        check_string_containment(res, gen_pp[0]["user_right"])
+@pytest.mark.parametrize("gen_pp", [generate_pp_for_test() for i in range(100)])
+def test_model(gen_pp):
+    res = summarize(gen_pp[1]).lower()
+    print("Check company name: " + gen_pp[0]["company_name"].lower())
+    check_list_containment(res, gen_pp[0]["company_name"].lower())
+    print("Check data types")
+    check_list_containment(res, gen_pp[0]["collected_data_types"].lower())
+    print("Check retention period")
+    check_list_containment(res, gen_pp[0]["retention_period"].lower())
+    print("Check user rights")
+    check_list_containment(res, gen_pp[0]["user_right"].lower())
 
 
 def check_string_containment(result, _string):
-    assert _string in result
+    assert _string in result, _string + " was in in the result"
 
 
 def check_list_containment(result, _list):
     for _l in _list:
-        assert _l in result
+        assert _l in result, _l + " was in in the result"
