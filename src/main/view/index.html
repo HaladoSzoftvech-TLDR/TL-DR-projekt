@@ -54,6 +54,11 @@
             margin-left: auto;
             margin-right: auto;
         }
+        .clear-button 
+        {
+            position: relative;
+            left: 225px;
+        }
     </style>
 </head>
 <script>
@@ -76,8 +81,9 @@
             return false;
         }
     }
-
-
+    function clearInput() {
+        document.getElementById('inputText').value = '';
+    }
 </script>
 <body>
     <div class="navbar">
@@ -91,11 +97,12 @@
         <h1>TL;DR - GDPR Summarizer</h1>
     </div>
     <form class="sum-form" action="/summarize" method="post" enctype="multipart/form-data" name="myForm" onsubmit="return validateForm()">
-        <textarea id="inputText" name="inputText" class="textbox text-input" placeholder="Provide the input text (i.e. GDPR document contents) here..."></textarea>
+        <textarea id="inputText" name="inputText" class="textbox text-input" placeholder="Provide the input text (i.e. GDPR document contents) here...">{{ inputText }}</textarea>
         <textarea id="outputText" name="outputText" class="textbox text-output" readonly placeholder="Summarized text will appear here">{{ outputText }}</textarea>
         <span class="buttons">
             <input class="summarize-button" type="submit" value="Summarize!">
             <input type="file" name="file" accept=".pdf">
+            <button type="button" class="clear-button" onclick="clearInput()">Clear</button>
         </span>
     </form>
 </body>
