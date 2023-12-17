@@ -1,9 +1,13 @@
 from transformers import T5ForConditionalGeneration, T5Tokenizer
 import torch
+import os
 
 model = T5ForConditionalGeneration(T5ForConditionalGeneration.from_pretrained("t5-small").config)
 tokenizer = T5Tokenizer.from_pretrained("t5-small", model_max_length=1024)
-model.load_state_dict(torch.load("./model.pt"))
+model_dir = os.path.dirname(os.path.realpath(__file__))
+model_path = os.path.join(model_dir, 'model.pt')
+model.load_state_dict(torch.load(model_path))
+
 
 
 def summarize(text):
