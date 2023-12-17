@@ -58,13 +58,19 @@
 </head>
 <script>
     function validateForm() {
-        var x = document.forms["myForm"]["inputText"].value;
-        var y = document.forms["myForm"]["file"].value;
-        if (x == "" && y == "") {
-            alert("No file or text provided");
-            return false;
-        }
+    var x = document.forms["myForm"]["inputText"].value;
+    var y = document.forms["myForm"]["file"].value;
+    if (x == "" && y == "") {
+        alert("No file or text provided");
+        return false;
     }
+    if (x != "" && y != "") {
+        alert("File and also text were provided, please only provide one of them at the same time.");
+        document.forms["myForm"]["file"].value = "";
+        return false;
+    }
+    }
+
 </script>
 <body>
     <div class="navbar">
